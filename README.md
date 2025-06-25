@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+# Final Project: Kriptografi - Fungsi Hash & Integritas
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## ET234501 Kriptografi - Tahun Ajaran 2024/2025 Genap
 
-## Available Scripts
+**Anggota Kelompok**
+- 5027221044 - Subkhan Masudi
+- 5027221058 - Irfan Qobus Salim
+- 5027221061 - Hafiz Akmaldi Santosa
+- 5027221030 - Atha Rahma A
+- 5027221047 - Angela Christie
+- 5027221051 - Ditya Wahyu Ramdhan
+- 5027221050 - Jody Hezekiah Tanasa Sagala
+- 5002211173 - Aini Rini Yara Fadillah
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 1. Pendahuluan
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Proyek ini adalah bagian dari tugas Final Project mata kuliah Kriptografi (ET234501) yang berfokus pada implementasi praktis dari konsep Fungsi Hash dan Verifikasi Integritas. Aplikasi web ini terdiri dari dua komponen utama:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1.  **Password Strength Checker:** Mendemonstrasikan bagaimana fungsi hash digunakan dalam keamanan *password* dan memberikan umpan balik tentang kekuatan *password*.
+2.  **File Hash Generator & Verifier:** Memungkinkan pengguna menghasilkan hash dari sebuah file menggunakan berbagai algoritma (MD5, SHA-1, SHA-256, SHA-512) dan memverifikasi integritas file dengan membandingkan hash yang dihasilkan dengan hash yang diharapkan.
 
-### `npm test`
+[cite_start]Tujuan utama dari proyek ini adalah untuk memperdalam pemahaman teori tentang fungsi hash dan bagaimana aplikasi ini dapat digunakan untuk memastikan integritas data dan keamanan informasi.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 2. Fitur Aplikasi
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2.1. Password Strength Checker
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* **Input Password:** Input teks untuk memasukkan *password*.
+* **Generasi Hash (SHA-256):** Secara otomatis menghitung dan menampilkan hash SHA-256 dari *password* yang dimasukkan. Dilengkapi dengan penjelasan bahwa dalam sistem nyata, hanya hash yang disimpan.
+* **Indikator Kekuatan Password:** Memberikan penilaian visual (progress bar dan warna) serta saran tekstual berdasarkan panjang, penggunaan huruf besar/kecil, angka, dan karakter khusus.
+* **Umpan Balik Instan:** Memberikan *feedback* secara *real-time* saat *password* diketik.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2.2. File Hash Generator & Verifier
 
-### `npm run eject`
+* **Unggah File:** Memungkinkan pengguna untuk memilih file dari perangkat mereka.
+* **Pilihan Algoritma Hash:** Mendukung beberapa algoritma hashing populer seperti MD5, SHA-1, SHA-256, dan SHA-512.
+* **Generasi Hash:** Menghitung dan menampilkan nilai hash dari file yang diunggah menggunakan algoritma yang dipilih.
+* **Verifikasi Integritas:** Pengguna dapat menempelkan hash yang diharapkan, dan aplikasi akan membandingkannya dengan hash yang dihasilkan dari file yang diunggah untuk memverifikasi integritasnya.
+* **Visualisasi Hasil Verifikasi:** Menampilkan pesan keberhasilan (hijau) atau kegagalan (merah) secara jelas.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 3. Teknologi yang Digunakan
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* [cite_start]**Frontend:** React.js 
+* **Bahasa Pemrograman:** JavaScript
+* **Styling:** CSS
+* **Library Hashing:** `crypto-js` (untuk MD5, SHA-1, SHA-256, SHA-512)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 4. Cara Menjalankan Aplikasi
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal di mesin Anda:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1.  **Clone Repository (jika ini adalah repositori Git Anda):**
+    ```bash
+    git clone https://github.com/HafizSantosa/fp-kripto-hash
+    cd fp-kripto-hash
+    ```
 
-### Code Splitting
+2.  **Instal Dependensi:**
+    Pastikan Node.js dan npm (Node Package Manager) sudah terinstal di sistem Anda. Kemudian, instal semua dependensi yang diperlukan dengan perintah:
+    ```bash
+    npm install
+    ```
+    Ini akan menginstal React dan `crypto-js`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3.  **Jalankan Aplikasi:**
+    Setelah instalasi selesai, jalankan aplikasi menggunakan perintah:
+    ```bash
+    npm start
+    ```
+    Aplikasi akan terbuka di *browser* default (`http://localhost:3000`).
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 5. Cara Penggunaan Aplikasi
 
-### Making a Progressive Web App
+### 5.1. Password Strength Checker
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1.  Akses tab "Password Strength Checker".
+2.  Ketikkan *password* Anda di kolom input.
+3.  Lihat indikator kekuatan *password* (warna dan *progress bar*) dan saran di bawahnya.
+4.  Perhatikan nilai hash SHA-256 dari *password* Anda yang ditampilkan sebagai simulasi penyimpanan hash.
 
-### Advanced Configuration
+### 5.2. File Hash Generator & Verifier
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1.  Akses tab "File Hash Generator & Verifier".
+2.  Klik tombol "Pilih File" dan pilih file dari komputer Anda.
+3.  Pilih algoritma hash yang diinginkan dari *dropdown* ("MD5", "SHA-1", "SHA-256", atau "SHA-512").
+4.  Klik tombol "Generate Hash". Hash file akan ditampilkan.
+5.  Untuk verifikasi, tempelkan hash yang diharapkan (dari sumber lain yang terpercaya) ke dalam kolom "Hash yang Diharapkan".
+6.  Klik "Verifikasi Hash" untuk melihat apakah hash cocok atau tidak.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 6. Dokumentasi Teknis dan Desain
 
-### `npm run build` fails to minify
+* **Struktur Folder:**
+    * `public/`: Berisi `index.html` dan aset statis lainnya.
+    * `src/`: Berisi kode sumber React:
+        * `components/`: Folder untuk komponen UI modular (`Navbar.js`, `PasswordChecker.js`, `FileHasher.js`).
+        * `App.js`: Komponen utama yang mengelola navigasi dan merender komponen fitur.
+        * `index.js`: Titik masuk aplikasi React.
+        * `App.css`, `index.css`, dll.: File styling CSS.
+* **Pengelolaan State:** Aplikasi menggunakan React Hooks (`useState`, `useEffect`) untuk mengelola state lokal komponen, seperti *password* yang dimasukkan, file yang dipilih, hash yang dihasilkan, dan hasil verifikasi.
+* **Perhitungan Hash:**
+    * Menggunakan library `crypto-js` yang *robust* untuk semua perhitungan hash.
+    * File dibaca sebagai `ArrayBuffer` oleh `FileReader` dan kemudian dikonversi menjadi `WordArray` agar kompatibel dengan `crypto-js`.
+    * Perhitungan hash sepenuhnya dilakukan di sisi *client* (di *browser* pengguna).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## 7. Pembagian Tugas Individu 
+
+[cite_start]Ini adalah bagian penting untuk penilaian individu. Harap isi dengan kontribusi nyata setiap anggota kelompok.
+
+* **Hafiz Akmaldi Santosa (Ketua Tim & Arsitek Aplikasi)**
+    * Mengkoordinasikan keseluruhan proyek dan memfasilitasi komunikasi tim.
+    * Mendesain arsitektur aplikasi (struktur komponen, alur data).
+    * Membuat *boilerplate* proyek React dan mengonfigurasi dependensi utama.
+    * Melakukan *code review* dan memastikan konsistensi kode.
+    * Bertanggung jawab atas integrasi akhir semua komponen.
+* **Atha Rahma A (Pengembang Komponen Password Strength Checker - Logika)**
+    * Mengembangkan logika inti untuk analisis kekuatan *password* dan memberikan saran peningkatan.
+    * Mengintegrasikan perhitungan hash SHA-256 untuk simulasi penyimpanan *password*.
+    * Melakukan *unit testing* untuk logika kekuatan *password*.
+* **Irfan Qobus Salim (Pengembang Komponen Password Strength Checker - UI/UX)**
+    * Merancang dan mengimplementasikan antarmuka pengguna (UI) komponen "Password Strength Checker" (input, tampilan hash, progress bar).
+    * Menerapkan *styling* CSS yang menarik dan responsif untuk komponen ini.
+    * Memastikan pengalaman pengguna (UX) yang intuitif dan *feedback* visual yang jelas.
+* **Angela Christie (Pengembang Komponen File Hasher - Logika)**
+    * Mengembangkan logika inti untuk membaca file dan menghitung hash menggunakan `crypto-js`.
+    * Menangani konversi `ArrayBuffer` ke `WordArray` untuk `crypto-js`.
+    * Mengimplementasikan logika perbandingan hash untuk fungsi verifikasi integritas file.
+    * Melakukan *unit testing* untuk fungsi hashing dan verifikasi.
+* **Subkhan Masudi (Pengembang Komponen File Hasher - UI/UX)**
+    * Merancang dan mengimplementasikan antarmuka pengguna (UI) komponen "File Hash Generator & Verifier" (input file, *dropdown* algoritma, tampilan hash, input hash yang diharapkan, hasil verifikasi).
+    * Menerapkan *styling* CSS yang menarik dan responsif untuk komponen ini.
+    * Memastikan *feedback* visual yang jelas untuk status penghitungan dan hasil verifikasi.
+* **Aini Rini Yara Fadillah (Pengembang Komponen Umum & Struktur Navigasi)**
+    * Mengembangkan komponen `App.js` dan `Navbar.js` yang mengatur struktur aplikasi dan navigasi antar fitur.
+    * Mendesain dan mengimplementasikan *styling* CSS global (`App.css`, `Navbar.css`).
+    * Memastikan konsistensi *styling* dan tata letak di seluruh aplikasi.
+    * Bertanggung jawab atas integrasi awal komponen *PasswordChecker* dan *FileHasher* ke dalam `App.js`.
+* **Ditya Wahyu Ramdhan (Dokumentasi & Konten Teoritis)**
+    * Menyusun dan menulis semua bagian dokumentasi `README.md` secara detail dan akurat.
+    * Menjelaskan konsep teoritis fungsi hash dan integritas data yang relevan dengan aplikasi.
+    * [cite_start]Menyiapkan materi dasar untuk presentasi teori terkait topik yang dipilih.
+* **Jody Hezekiah Tanasa Sagala (Pengujian & Debugging)**
+    * Melakukan pengujian fungsionalitas menyeluruh untuk kedua komponen aplikasi.
+    * Menguji berbagai skenario dan kasus batas untuk mengidentifikasi *bug* atau *error*.
+    * Membantu dalam proses *debugging* dan verifikasi perbaikan.
+    * Memverifikasi akurasi hash yang dihasilkan oleh aplikasi dengan alat hashing eksternal yang terpercaya.
+
+
+---

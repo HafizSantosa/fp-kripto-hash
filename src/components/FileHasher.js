@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { sha256, sha512, md5 } from 'js-sha256'; // js-sha256 juga memiliki md5, sha512
+import CryptoJS from 'crypto-js'; // Menggunakan crypto-js untuk hashing
 import './FileHasher.css'; // Untuk styling
 
 function FileHasher() {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [algorithm, setAlgorithm] = useState('SHA-256');
+  const [algorithm, setAlgorithm] = useState('SHA-256'); // Default algoritma
   const [generatedHash, setGeneratedHash] = useState('');
   const [expectedHash, setExpectedHash] = useState('');
   const [verificationResult, setVerificationResult] = useState('');
@@ -12,8 +12,9 @@ function FileHasher() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    setGeneratedHash('');
-    setVerificationResult('');
+    setGeneratedHash(''); // Reset hash saat file berubah
+    setVerificationResult(''); // Reset hasil verifikasi saat file berubah
+    setExpectedHash(''); // Reset expected hash juga agar bersih
   };
 
   const handleGenerateHash = async () => {
@@ -24,41 +25,48 @@ function FileHasher() {
 
     const reader = new FileReader();
     reader.onload = async (e) => {
-      const buffer = e.target.result;
+      const arrayBuffer = e.target.result; // Hasil pembacaan file sebagai ArrayBuffer
+      // Konversi ArrayBuffer ke WordArray yang dibutuhkan oleh CryptoJS
+      const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+
       let hash = '';
 
-      // Untuk demo, kita baca seluruh file ke memori. Untuk file sangat besar,
-      // ini bisa dioptimalkan dengan membaca per bagian (chunking).
-      switch (algorithm) {
-        case 'MD5':
-          hash = md5(buffer);
-          break;
-        case 'SHA-1':
-          // js-sha256 tidak memiliki SHA-1 secara built-in.
-          // Anda mungkin perlu library lain seperti 'crypto-js' atau implementasi manual
-          // Untuk demo ini, kita bisa lewati atau gunakan SHA-256 sebagai placeholder
-          alert('SHA-1 tidak didukung oleh library demo ini. Silakan pilih SHA-256 atau SHA-512.');
-          hash = 'N/A';
-          break;
-        case 'SHA-256':
-          hash = sha256(buffer);
-          break;
-        case 'SHA-512':
-          hash = sha512(buffer);
-          break;
-        default:
-          hash = '';
+      try {
+        switch (algorithm) {
+          case 'MD5':
+            hash = CryptoJS.MD5(wordArray).toString();
+            break;
+          case 'SHA-1':
+            hash = CryptoJS.SHA1(wordArray).toString();
+            break;
+          case 'SHA-256':
+            hash = CryptoJS.SHA256(wordArray).toString();
+            break;
+          case 'SHA-512':
+            hash = CryptoJS.SHA512(wordArray).toString();
+            break;
+          default:
+            hash = 'Algoritma tidak dikenal';
+            break;
+        }
+      } catch (error) {
+        console.error('Error generating hash:', error);
+        hash = 'Error saat menghasilkan hash';
+        alert('Terjadi kesalahan saat menghasilkan hash. Cek konsol browser untuk detail.');
       }
       setGeneratedHash(hash);
     };
-    reader.readAsArrayBuffer(selectedFile);
+    reader.readAsArrayBuffer(selectedFile); // Baca file sebagai ArrayBuffer
   };
 
   const handleVerifyHash = () => {
+    // Pastikan hash yang dihasilkan dan hash yang diharapkan tidak kosong
     if (!generatedHash || !expectedHash) {
       setVerificationResult('Silakan generate hash file dan masukkan hash yang diharapkan.');
       return;
     }
+
+    // Bandingkan hash (case-insensitive)
     if (generatedHash.toLowerCase() === expectedHash.toLowerCase()) {
       setVerificationResult('Hash cocok! Integritas file terverifikasi. ✅');
     } else {
@@ -66,10 +74,20 @@ function FileHasher() {
     }
   };
 
+  // Menambahkan kelas dinamis untuk hasil verifikasi
+  const getVerificationResultClass = () => {
+    if (verificationResult.includes('✅')) {
+      return 'verification-result success';
+    } else if (verificationResult.includes('❌')) {
+      return 'verification-result failure';
+    }
+    return 'verification-result';
+  };
+
   return (
     <div className="file-hasher">
-      <h2>File Hash Generator & Verifier </h2>
-      <p>Verifikasi integritas file menggunakan fungsi hash. </p>
+      <h2>File Hash Generator & Verifier</h2>
+      <p>Verifikasi integritas file menggunakan fungsi hash.</p>
 
       <div className="input-group">
         <label htmlFor="file-input">Pilih File:</label>
@@ -81,7 +99,7 @@ function FileHasher() {
         <label htmlFor="algorithm-select">Pilih Algoritma Hash:</label>
         <select id="algorithm-select" value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
           <option value="MD5">MD5</option>
-          {/* <option value="SHA-1">SHA-1 (Tidak direkomendasikan untuk keamanan)</option> */}
+          <option value="SHA-1">SHA-1 (Tidak direkomendasikan untuk keamanan)</option>
           <option value="SHA-256">SHA-256</option>
           <option value="SHA-512">SHA-512</option>
         </select>
@@ -113,7 +131,7 @@ function FileHasher() {
         </div>
         <button onClick={handleVerifyHash} disabled={!generatedHash}>Verifikasi Hash</button>
         {verificationResult && (
-          <p className="verification-result">{verificationResult}</p>
+          <p className={getVerificationResultClass()}>{verificationResult}</p>
         )}
       </div>
     </div>
