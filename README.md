@@ -261,7 +261,27 @@ Penentuan Kekuatan Keseluruhan: Berdasarkan score total (maksimal 5):
 5.  Untuk verifikasi, tempelkan hash yang diharapkan (dari sumber lain yang terpercaya) ke dalam kolom "Hash yang Diharapkan".
 6.  Klik "Verifikasi Hash" untuk melihat apakah hash cocok atau tidak.
 
+#### Cara penggunaan 
 
+1. Akses tab "File Hash Generator & Verifier"
+![halamanview](dokumentasi/File%20Hash%20Generator%20&%20Verifier/tampilan%20web.png)
+
+
+2. Klik tombol "Pilih File" dan pilih file dari komputer Anda 
+ ![pilihfile](dokumentasi/File%20Hash%20Generator%20&%20Verifier/pilih-file.png)
+
+
+ 3. Pilih algoritma hash yang diinginkan
+
+ ![pilihalgoritma](dokumentasi/File%20Hash%20Generator%20&%20Verifier/pilih-algo.png)
+
+ 4. Klik tombol "Generate Hash". Hash file akan ditampilkan.
+
+ ![generatehash](dokumentasi/File%20Hash%20Generator%20&%20Verifier/generate-hash.png)
+
+ 5. hasil dari hash yang di generate
+
+ ![hasilhash](dokumentasi/File%20Hash%20Generator%20&%20Verifier/hasil-hash.png)
 ---
 
 ## 6. Dokumentasi Teknis dan Desain
