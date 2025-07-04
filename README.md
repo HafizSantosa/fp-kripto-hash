@@ -275,7 +275,7 @@ Fungsi ini akan mengembalikan:
 
 ---
 
-> *VirusTotal adalah layanan pemindaian file dan URL yang mengintegrasikan puluhan engine antivirus, sehingga pengguna dapat mengecek apakah file mereka aman berdasarkan hash.*  
+> *VirusTotal adalah layanan pemindaian file dan URL yang mengintegrasikan puluhan engine antivirus, sehingga pengguna dapat mengecek apakah file mereka aman berdasarkan hash.* <br>
 > *Catatan: Folder `uploads/` hanya menyimpan file sementara selama proses hash dan verifikasi berlangsung. File tidak disimpan secara permanen.*
 
 
