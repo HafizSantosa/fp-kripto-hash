@@ -1,80 +1,91 @@
 import React, { useState } from 'react';
-import CryptoJS from 'crypto-js'; // Menggunakan crypto-js untuk hashing
-import './FileHasher.css'; // Untuk styling
+import './FileHasher.css';
 
 function FileHasher() {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [algorithm, setAlgorithm] = useState('SHA-256'); // Default algoritma
+  const [algorithm, setAlgorithm] = useState('SHA-256');
   const [generatedHash, setGeneratedHash] = useState('');
   const [expectedHash, setExpectedHash] = useState('');
   const [verificationResult, setVerificationResult] = useState('');
+  const [virusCheckResult, setVirusCheckResult] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    setGeneratedHash(''); // Reset hash saat file berubah
-    setVerificationResult(''); // Reset hasil verifikasi saat file berubah
-    setExpectedHash(''); // Reset expected hash juga agar bersih
+    setGeneratedHash('');
+    setVerificationResult('');
+    setExpectedHash('');
+    setVirusCheckResult(null);
   };
 
   const handleGenerateHash = async () => {
     if (!selectedFile) {
-      alert('Pilih file terlebih dahulu!');
+      alert("Pilih file terlebih dahulu!");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const arrayBuffer = e.target.result; // Hasil pembacaan file sebagai ArrayBuffer
-      // Konversi ArrayBuffer ke WordArray yang dibutuhkan oleh CryptoJS
-      const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("algorithm", algorithm);
 
-      let hash = '';
-
-      try {
-        switch (algorithm) {
-          case 'MD5':
-            hash = CryptoJS.MD5(wordArray).toString();
-            break;
-          case 'SHA-1':
-            hash = CryptoJS.SHA1(wordArray).toString();
-            break;
-          case 'SHA-256':
-            hash = CryptoJS.SHA256(wordArray).toString();
-            break;
-          case 'SHA-512':
-            hash = CryptoJS.SHA512(wordArray).toString();
-            break;
-          default:
-            hash = 'Algoritma tidak dikenal';
-            break;
-        }
-      } catch (error) {
-        console.error('Error generating hash:', error);
-        hash = 'Error saat menghasilkan hash';
-        alert('Terjadi kesalahan saat menghasilkan hash. Cek konsol browser untuk detail.');
+    try {
+      const response = await fetch("http://localhost:5000/hash-file", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.hash) {
+        setGeneratedHash(data.hash);
+        setVirusCheckResult(null); // reset
+      } else {
+        alert("Error: " + data.error);
       }
-      setGeneratedHash(hash);
-    };
-    reader.readAsArrayBuffer(selectedFile); // Baca file sebagai ArrayBuffer
+    } catch (error) {
+      console.error("Gagal fetch:", error);
+      alert("Terjadi kesalahan saat menghubungi server.");
+    }
   };
 
-  const handleVerifyHash = () => {
-    // Pastikan hash yang dihasilkan dan hash yang diharapkan tidak kosong
-    if (!generatedHash || !expectedHash) {
-      setVerificationResult('Silakan generate hash file dan masukkan hash yang diharapkan.');
+  const handleVerifyHash = async () => {
+    if (!selectedFile || !expectedHash) {
+      setVerificationResult("Silakan generate hash dan masukkan hash yang diharapkan.");
       return;
     }
 
-    // Bandingkan hash (case-insensitive)
-    if (generatedHash.toLowerCase() === expectedHash.toLowerCase()) {
-      setVerificationResult('Hash cocok! Integritas file terverifikasi. ✅');
-    } else {
-      setVerificationResult('Hash TIDAK cocok! File mungkin telah dirusak atau diubah. ❌');
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("expected_hash", expectedHash);
+    formData.append("algorithm", algorithm);
+
+    try {
+      const response = await fetch("http://localhost:5000/verify-hash", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      setVerificationResult(data.message);
+    } catch (error) {
+      console.error("Gagal verifikasi:", error);
+      alert("Terjadi kesalahan saat menghubungi server.");
     }
   };
 
-  // Menambahkan kelas dinamis untuk hasil verifikasi
+  const handleCheckVirusTotal = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/check-virus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hash: generatedHash }),
+      });
+
+      const data = await res.json();
+      setVirusCheckResult(data);
+    } catch (error) {
+      console.error("Gagal cek VirusTotal:", error);
+      alert("Gagal menghubungi server VirusTotal.");
+    }
+  };
+
   const getVerificationResultClass = () => {
     if (verificationResult.includes('✅')) {
       return 'verification-result success';
@@ -99,7 +110,7 @@ function FileHasher() {
         <label htmlFor="algorithm-select">Pilih Algoritma Hash:</label>
         <select id="algorithm-select" value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
           <option value="MD5">MD5</option>
-          <option value="SHA-1">SHA-1 (Tidak direkomendasikan untuk keamanan)</option>
+          <option value="SHA-1">SHA-1 (Tidak direkomendasikan)</option>
           <option value="SHA-256">SHA-256</option>
           <option value="SHA-512">SHA-512</option>
         </select>
@@ -111,6 +122,21 @@ function FileHasher() {
         <div className="hash-result">
           <h3>Hash yang Dihasilkan ({algorithm}):</h3>
           <p className="hashed-value">{generatedHash}</p>
+          <button onClick={handleCheckVirusTotal}>Cek di VirusTotal</button>
+        </div>
+      )}
+
+      {virusCheckResult && (
+        <div className="virus-check-result">
+          <h3>Hasil Pemeriksaan VirusTotal:</h3>
+          <p><strong>Status:</strong> {virusCheckResult.verified ? "✅ Hash dikenali" : "❌ Hash tidak ditemukan"}</p>
+          {virusCheckResult.verified && (
+            <>
+              <p><strong>Malicious:</strong> {virusCheckResult.malicious}</p>
+              <p><strong>Harmless:</strong> {virusCheckResult.harmless}</p>
+              <p><strong>Suspicious:</strong> {virusCheckResult.suspicious}</p>
+            </>
+          )}
         </div>
       )}
 

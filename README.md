@@ -3,14 +3,17 @@
 ## ET234501 Kriptografi - Tahun Ajaran 2024/2025 Genap
 
 **Anggota Kelompok**
-- 5027221044 - Subkhan Masudi
-- 5027221058 - Irfan Qobus Salim
-- 5027221061 - Hafiz Akmaldi Santosa
-- 5027221030 - Atha Rahma A
-- 5027221047 - Angela Christie
-- 5027221051 - Ditya Wahyu Ramdhan
-- 5027221050 - Jody Hezekiah Tanasa Sagala
-- 5002211173 - Aini Rini Yara Fadillah
+| NRP        | Nama                                 |
+|-------------|---------------------------------------|
+| 5027221044  | Subkhan Masudi                        |
+| 5027221058  | Irfan Qobus Salim                     |
+| 5027221061  | Hafiz Akmaldi Santosa                 |
+| 5027221030  | Atha Rahma A                          |
+| 5027221047  | Angela Christie                       |
+| 5027221051  | Ditya Wahyu Ramdhan                   |
+| 5027221050  | Jody Hezekiah Tanasa Sagala           |
+| 5002211173  | Aini Rini Yara Fadillah               |
+
 
 ---
 
@@ -21,7 +24,7 @@ Proyek ini adalah bagian dari tugas Final Project mata kuliah Kriptografi (ET234
 1.  **Password Strength Checker:** Mendemonstrasikan bagaimana fungsi hash digunakan dalam keamanan *password* dan memberikan umpan balik tentang kekuatan *password*.
 2.  **File Hash Generator & Verifier:** Memungkinkan pengguna menghasilkan hash dari sebuah file menggunakan berbagai algoritma (MD5, SHA-1, SHA-256, SHA-512) dan memverifikasi integritas file dengan membandingkan hash yang dihasilkan dengan hash yang diharapkan.
 
-[cite_start]Tujuan utama dari proyek ini adalah untuk memperdalam pemahaman teori tentang fungsi hash dan bagaimana aplikasi ini dapat digunakan untuk memastikan integritas data dan keamanan informasi.
+Tujuan utama dari proyek ini adalah untuk memperdalam pemahaman teori tentang fungsi hash dan bagaimana aplikasi ini dapat digunakan untuk memastikan integritas data dan keamanan informasi.
 
 ---
 
@@ -46,27 +49,28 @@ Proyek ini adalah bagian dari tugas Final Project mata kuliah Kriptografi (ET234
 
 ## 3. Teknologi yang Digunakan
 
-* [cite_start]**Frontend:** React.js 
+* **Frontend:** React.js 
+* **Backend:** Python (Flask)
 * **Bahasa Pemrograman:** JavaScript
 * **Styling:** CSS
-* **Library Hashing:** `crypto-js` (untuk MD5, SHA-1, SHA-256, SHA-512)
+* **Library Hashing:** Hashlib
 
-### 3.1 penjelasan logika cara kerja MD5, SHA-1, SHA-256, dan SHA-512 :
+### 3.1 Penjelasan logika cara kerja MD5, SHA-1, SHA-256, dan SHA-512 :
 
 #### 1. MD5  
 * MD5 menghasilkan output 128-bit (32 karakter heksadesimal).
 
 * Langkah-langkah:
 
-1. Padding: Pesan dipanjangkan agar panjangnya ≡ 448 mod 512 bit (agar totalnya 512-bit block).
+    1. Padding: Pesan dipanjangkan agar panjangnya ≡ 448 mod 512 bit (agar totalnya 512-bit block).
 
-2. Inisialisasi: 4 register 32-bit (A, B, C, D).
+    2. Inisialisasi: 4 register 32-bit (A, B, C, D).
 
-3. Pembagian: Data dibagi menjadi blok 512-bit.
+    3. Pembagian: Data dibagi menjadi blok 512-bit.
 
-4. Transformasi: Setiap blok diproses dalam 4 ronde (total 64 operasi) menggunakan fungsi logika (F, G, H, I).
+    4. Transformasi: Setiap blok diproses dalam 4 ronde (total 64 operasi) menggunakan fungsi logika (F, G, H, I).
 
-5. Output: A, B, C, D digabungkan menjadi hash 128-bit. 
+    5. Output: A, B, C, D digabungkan menjadi hash 128-bit. 
 
 * Rumus Fungsi Non-Linear :
 ```F(B, C, D) = (B ∧ C) ∨ (¬B ∧ D)
@@ -154,10 +158,19 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal di me
     ```bash
     npm install
     ```
-    Ini akan menginstal React dan `crypto-js`.
+3.  **Jalankan Backend:**
+    Pastikan Python sudah terinstal di sistem Anda. Kemudian, instal semua dependensi yang diperlukan dengan perintah:
+    ```bash
+    pip install -r requirements.txt
+    ```
+    Kemudian, jalankan backend dengan perintah:
+    ```bash
+    python backend/app.py
+    ```
+    Backend akan berjalan di `http://localhost:5000`
 
-3.  **Jalankan Aplikasi:**
-    Setelah instalasi selesai, jalankan aplikasi menggunakan perintah:
+4.  **Jalankan Frontend:**
+    Setelah backend, jalankan frontend menggunakan perintah:
     ```bash
     npm start
     ```
@@ -169,73 +182,54 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal di me
 
 ### 5.1. Password Strength Checker
 
-1.  Akses tab "Password Strength Checker".
-2.  Ketikkan *password* Anda di kolom input.
-3.  Lihat indikator kekuatan *password* (warna dan *progress bar*) dan saran di bawahnya.
-4.  Perhatikan nilai hash SHA-256 dari *password* Anda yang ditampilkan sebagai simulasi penyimpanan hash.
+1. Akses tab **"Password Strength Checker"** pada antarmuka aplikasi.
+2. Ketikkan *password* Anda di kolom input yang tersedia.
+3. Sistem secara otomatis akan mengirimkan password ke backend untuk dianalisis.
+4. Hasil yang ditampilkan meliputi:
+   - Nilai hash SHA-256 dari password Anda.
+   - Indikator kekuatan password berupa warna dan *progress bar*.
+   - Umpan balik atau saran perbaikan jika password dianggap lemah.
 
-#### 5.1.1 Logika Penilaian 
-```const analyzePasswordStrength = (pwd) => {
-  let score = 0;
-  let feedback = [];
+---
 
-  // Kriteria dan Penambahan Skor
-  if (pwd.length >= 8) { score += 1; } else { feedback.push('Panjang minimal 8 karakter.'); }
-  if (/[A-Z]/.test(pwd)) { score += 1; } else { feedback.push('Tambahkan huruf kapital.'); }
-  if (/[a-z]/.test(pwd)) { score += 1; } else { feedback.push('Tambahkan huruf kecil.'); }
-  if (/[0-9]/.test(pwd)) { score += 1; } else { feedback.push('Tambahkan angka.'); }
-  if (/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(pwd)) { score += 1; } else { feedback.push('Tambahkan karakter khusus (!@#$%...).'); }
+#### 5.1.1 Logika Penilaian (Backend - Python)
 
-  // Penentuan Overall Feedback dan Warna
-  let color = 'red';
-  let overallFeedback = 'Sangat Lemah';
-  if (score >= 4) {
-    color = 'green';
-    overallFeedback = 'Sangat Kuat';
-  } else if (score >= 3) {
-    color = 'orange';
-    overallFeedback = 'Cukup Kuat';
-  } else if (score >= 2) {
-    color = 'yellow';
-    overallFeedback = 'Lemah';
-  }
+Logika penilaian password dilakukan oleh backend menggunakan fungsi `analyze_password_strength(password)` di Python.
 
-  // Memperbarui State Strength
-  setStrength({
-    score: score,
-    feedback: feedback.length > 0 ? feedback.join(' ') : 'Password Anda sangat kuat!',
-    overall: overallFeedback,
-    color: color
-  });
-};
-```
-* Fungsi ini bertanggung jawab untuk mengevaluasi kekuatan password.
+Berikut ini penjelasan algoritma yang digunakan:
 
-* Ini menginisialisasi score menjadi 0 dan feedback array kosong.
+| Kriteria Pemeriksaan Password          | Poin | Umpan Balik Jika Tidak Terpenuhi               |
+|----------------------------------------|------|------------------------------------------------|
+| Panjang minimal 8 karakter             | +1   | Panjang minimal 8 karakter                     |
+| Mengandung huruf kapital (A–Z)         | +1   | Tambahkan huruf kapital                        |
+| Mengandung huruf kecil (a–z)           | +1   | Tambahkan huruf kecil                          |
+| Mengandung angka (0–9)                 | +1   | Tambahkan angka                                |
+| Mengandung karakter khusus (!@#$%...)  | +1   | Tambahkan karakter khusus (!@#$%...)          |
 
-* Kemudian, ia memeriksa password terhadap 5 kriteria menggunakan regex (regular expressions):
+**Total Skor Maksimal: 5**
 
-* Panjang minimal 8 karakter.
+---
 
-* Mengandung huruf kapital.
+#### Interpretasi Skor
 
-* Mengandung huruf kecil.
+| Skor | Kekuatan      | Warna Tampilan |
+|------|---------------|----------------|
+| 4–5  | Sangat Kuat   | Hijau          |
+| 3    | Cukup Kuat    | Oranye         |
+| 2    | Lemah         | Kuning         |
+| 0–1  | Sangat Lemah  | Merah          |
 
-* Mengandung angka(123...).
+---
 
-* Mengandung karakter khusus(!@#...).
+Fungsi ini akan mengembalikan:
+- `score`: Skor akhir kekuatan password.
+- `feedback`: Saran perbaikan jika ada kriteria yang tidak terpenuhi.
+- `overall`: Penilaian umum seperti “Sangat Lemah” hingga “Sangat Kuat”.
+- `color`: Warna indikator kekuatan.
 
-*  Untuk setiap kriteria yang terpenuhi, **score ditingkatkan 1**. Jika tidak terpenuhi, pesan saran ditambahkan ke array feedback.
+---
 
-Penentuan Kekuatan Keseluruhan: Berdasarkan score total (maksimal 5):
-
-1. Skor 4-5: "Sangat Kuat" (hijau)
-
-2. Skor 3: "Cukup Kuat" (oranye)
-
-3. Skor 2: "Lemah" (kuning)
-
-4. Skor 0-1: "Sangat Lemah" (merah)
+> 🔐 *Catatan: Nilai hash yang ditampilkan merupakan hasil simulasi hashing dengan algoritma SHA-256. Dalam praktik nyata, hash inilah yang disimpan di database, bukan password aslinya.*
 
 #### 5.1.2 UI/UX (Hasil yang di perlihatkan)
 
@@ -254,16 +248,41 @@ Penentuan Kekuatan Keseluruhan: Berdasarkan score total (maksimal 5):
 
 ### 5.2. File Hash Generator & Verifier
 
-1.  Akses tab "File Hash Generator & Verifier".
-2.  Klik tombol "Pilih File" dan pilih file dari komputer Anda.
-3.  Pilih algoritma hash yang diinginkan dari *dropdown* ("MD5", "SHA-1", "SHA-256", atau "SHA-512").
-4.  Klik tombol "Generate Hash". Hash file akan ditampilkan.
-5.  Untuk verifikasi, tempelkan hash yang diharapkan (dari sumber lain yang terpercaya) ke dalam kolom "Hash yang Diharapkan".
-6.  Klik "Verifikasi Hash" untuk melihat apakah hash cocok atau tidak.
+1. Akses tab **"File Hash Generator & Verifier"** pada antarmuka aplikasi.
+2. Klik tombol **"Pilih File"** dan pilih file dari komputer Anda.
+3. Pilih algoritma hash yang diinginkan dari dropdown:
+   - `MD5`
+   - `SHA-1`
+   - `SHA-256`
+   - `SHA-512`
+4. Klik tombol **"Generate Hash"** untuk mengirim file ke backend dan menghasilkan nilai hash.
+5. Nilai hash dari file akan ditampilkan setelah diproses oleh server Flask.
+6. Backend juga secara otomatis mengirimkan hash ke **VirusTotal** untuk mengecek apakah hash tersebut sudah terdaftar sebagai file berbahaya atau aman.
+7. Hasil pengecekan dari VirusTotal akan ditampilkan, meliputi:
+   - Apakah file tersebut pernah terdeteksi sebelumnya,
+   - Jumlah engine antivirus yang menandai file sebagai malicious atau clean.
+8. Untuk melakukan verifikasi manual:
+   - Tempelkan hash dari sumber terpercaya ke kolom **"Hash yang Diharapkan"**.
+   - Klik **"Verifikasi Hash"** untuk mengecek apakah hash tersebut sesuai dengan file yang Anda upload.
+
+---
+
+#### 🔧 Backend Logic
+
+- File dikirim ke endpoint Flask `/hash-file`, disimpan sementara di folder `uploads/`, dan dihitung hash-nya menggunakan algoritma yang dipilih.
+- Hash yang dihasilkan akan dicek ke **VirusTotal** menggunakan API publik untuk melihat riwayat keamanan file tersebut.
+- Untuk verifikasi manual, file dikirim ke endpoint `/verify-hash` dan dibandingkan dengan nilai hash yang diinput oleh pengguna.
+
+---
+
+> *VirusTotal adalah layanan pemindaian file dan URL yang mengintegrasikan puluhan engine antivirus, sehingga pengguna dapat mengecek apakah file mereka aman berdasarkan hash.*  
+> *Catatan: Folder `uploads/` hanya menyimpan file sementara selama proses hash dan verifikasi berlangsung. File tidak disimpan secara permanen.*
+
 
 #### Cara penggunaan 
 
 1. Akses tab "File Hash Generator & Verifier"
+
 ![halamanview](dokumentasi/File%20Hash%20Generator%20&%20Verifier/tampilan%20web.png)
 
 
@@ -279,9 +298,9 @@ Penentuan Kekuatan Keseluruhan: Berdasarkan score total (maksimal 5):
 
  ![generatehash](dokumentasi/File%20Hash%20Generator%20&%20Verifier/generate-hash.png)
 
- 5. hasil dari hash yang di generate
+ 5. Hasil verifikasi manual dan dari VirusTotal dari hash yang di generate
 
- ![hasilhash](dokumentasi/File%20Hash%20Generator%20&%20Verifier/hasil-hash.png)
+ ![hasilhash](dokumentasi/File%20Hash%20Generator%20&%20Verifier/image.png)
 ---
 
 ## 6. Dokumentasi Teknis dan Desain
@@ -293,17 +312,34 @@ Penentuan Kekuatan Keseluruhan: Berdasarkan score total (maksimal 5):
         * `App.js`: Komponen utama yang mengelola navigasi dan merender komponen fitur.
         * `index.js`: Titik masuk aplikasi React.
         * `App.css`, `index.css`, dll.: File styling CSS.
+    * `backend/`: Folder untuk backend Flask API:
+        * `app.py`: File utama yang berisi endpoint Flask (`/password-check`, `/hash-file`, `/verify-hash`) serta integrasi dengan VirusTotal API.
+        * `utils.py`: Berisi fungsi-fungsi pendukung seperti:
+            * `generate_hash()`: Fungsi hashing berdasarkan algoritma.
+            * `verify_hash()`: Fungsi verifikasi hash file.
+            * `analyze_password_strength()`: Fungsi penilaian kekuatan password.
+            * `check_hash_virustotal()`: Fungsi untuk memeriksa hash ke VirusTotal.
+        * `uploads/`: Folder sementara untuk menyimpan file yang diunggah dari frontend sebelum diproses (hash/verifikasi).
+        * `requirements.txt`: Daftar dependensi Python (Flask, Flask-CORS, requests, dll).
+
 * **Pengelolaan State:** Aplikasi menggunakan React Hooks (`useState`, `useEffect`) untuk mengelola state lokal komponen, seperti *password* yang dimasukkan, file yang dipilih, hash yang dihasilkan, dan hasil verifikasi.
-* **Perhitungan Hash:**
-    * Menggunakan library `crypto-js` yang *robust* untuk semua perhitungan hash.
-    * File dibaca sebagai `ArrayBuffer` oleh `FileReader` dan kemudian dikonversi menjadi `WordArray` agar kompatibel dengan `crypto-js`.
-    * Perhitungan hash sepenuhnya dilakukan di sisi *client* (di *browser* pengguna).
+* **Perhitungan Hash (Backend Flask)**
+
+    - Perhitungan hash **tidak lagi dilakukan di sisi client** (browser).
+    - File dikirim ke backend melalui HTTP POST (`/hash-file`) menggunakan `FormData`.
+    - Di backend (Python Flask), file disimpan sementara ke folder `uploads/` dan dibaca secara biner.
+    - Hash dihitung menggunakan **library `hashlib`** bawaan Python, yang mendukung berbagai algoritma seperti:
+        - MD5
+        - SHA-1
+        - SHA-256
+        - SHA-512
+    - Hasil hash kemudian dikembalikan ke frontend dalam format JSON dan ditampilkan kepada pengguna.
 
 ---
 
 ## 7. Pembagian Tugas Individu 
 
-[cite_start]Ini adalah bagian penting untuk penilaian individu. Harap isi dengan kontribusi nyata setiap anggota kelompok.
+Ini adalah bagian penting untuk penilaian individu. Harap isi dengan kontribusi nyata setiap anggota kelompok.
 
 * **Hafiz Akmaldi Santosa (Ketua Tim & Arsitek Aplikasi)**
     * Mengkoordinasikan keseluruhan proyek dan memfasilitasi komunikasi tim.
@@ -311,6 +347,7 @@ Penentuan Kekuatan Keseluruhan: Berdasarkan score total (maksimal 5):
     * Membuat *boilerplate* proyek React dan mengonfigurasi dependensi utama.
     * Melakukan *code review* dan memastikan konsistensi kode.
     * Bertanggung jawab atas integrasi akhir semua komponen.
+    * Rajin sholat
 * **Atha Rahma A (Pengembang Komponen Password Strength Checker - Logika)**
     * Mengembangkan logika inti untuk analisis kekuatan *password* dan memberikan saran peningkatan.
     * Mengintegrasikan perhitungan hash SHA-256 untuk simulasi penyimpanan *password*.

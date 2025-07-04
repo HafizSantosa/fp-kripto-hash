@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { sha256 } from 'js-sha256'; // Instal library ini: npm install js-sha256
 import './PasswordChecker.css'; // Untuk styling
 
 function PasswordChecker() {
@@ -9,64 +8,33 @@ function PasswordChecker() {
 
   useEffect(() => {
     if (password) {
-      setHashedPassword(sha256(password));
-      analyzePasswordStrength(password);
+      fetch("http://localhost:5000/password-check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setHashedPassword(data.hash);
+          setStrength({
+            score: data.score,
+            feedback: data.feedback,
+            overall: data.overall,
+            color: data.color,
+          });
+        })
+        .catch((err) => console.error("Error:", err));
     } else {
-      setHashedPassword('');
-      setStrength({ score: 0, feedback: 'Masukkan password untuk mengecek kekuatannya.', color: 'gray' });
+      setHashedPassword("");
+      setStrength({
+        score: 0,
+        feedback: "Masukkan password untuk mengecek kekuatannya.",
+        color: "gray",
+      });
     }
-  }, [password]);
-
-  const analyzePasswordStrength = (pwd) => {
-    let score = 0;
-    let feedback = [];
-
-    if (pwd.length >= 8) {
-      score += 1;
-    } else {
-      feedback.push('Panjang minimal 8 karakter.');
-    }
-    if (/[A-Z]/.test(pwd)) {
-      score += 1;
-    } else {
-      feedback.push('Tambahkan huruf kapital.');
-    }
-    if (/[a-z]/.test(pwd)) {
-      score += 1;
-    } else {
-      feedback.push('Tambahkan huruf kecil.');
-    }
-    if (/[0-9]/.test(pwd)) {
-      score += 1;
-    } else {
-      feedback.push('Tambahkan angka.');
-    }
-    if (/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(pwd)) {
-      score += 1;
-    } else {
-      feedback.push('Tambahkan karakter khusus (!@#$%...).');
-    }
-
-    let color = 'red';
-    let overallFeedback = 'Sangat Lemah';
-    if (score >= 4) {
-      color = 'green';
-      overallFeedback = 'Sangat Kuat';
-    } else if (score >= 3) {
-      color = 'orange';
-      overallFeedback = 'Cukup Kuat';
-    } else if (score >= 2) {
-      color = 'yellow';
-      overallFeedback = 'Lemah';
-    }
-
-    setStrength({
-      score: score,
-      feedback: feedback.length > 0 ? feedback.join(' ') : 'Password Anda sangat kuat!',
-      overall: overallFeedback,
-      color: color
-    });
-  };
+  }, [password]);  
 
   return (
     <div className="password-checker">

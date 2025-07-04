@@ -186,6 +186,7 @@
   position: relative;
   overflow: hidden;
   margin-bottom: 1rem;
+  /* margin: 1rem 0; */
   box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
 }
 
@@ -277,7 +278,7 @@
   color: #00ffff;
   word-break: break-all;
   line-height: 1.4;
-  margin: 0;
+  margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
 }
